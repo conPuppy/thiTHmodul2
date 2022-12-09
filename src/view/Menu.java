@@ -49,11 +49,13 @@ public class Menu {
                             studentManager.writeStudent();
                             break;
                         case 8:
+                            System.exit(0);
                             break;
 
                     }
                 } else System.out.println("Phải nhập từ 1 đến 8");
             } catch (Exception e) {
+                e.printStackTrace();
                 System.err.println("Nhập số đi!");
             }
         }

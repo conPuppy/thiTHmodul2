@@ -8,7 +8,7 @@ import java.util.*;
 
 public class StudentManager {
     Scanner scanner = new Scanner(System.in);
-    List<Student> students = new ArrayList<>();
+    static List<Student> students = new ArrayList<>();
     ReadWrite readWrite = new ReadWrite();
 
     //    hàm thêm sinh viên:
@@ -18,18 +18,20 @@ public class StudentManager {
 
     //  hàm tạo sinh viên:
     public Student createStudent() {
-        String id = "";
-        String name = null;
-        int age = 0;
-        String gender = null;
-        String address = null;
-        double avgScore = 0;
+        String id ;
+        String name;
+        int age;
+        String gender;
+        String address;
+        double avgScore;
 
-        System.out.println("Nhập mã sinh viên: ");
-        id = scanner.nextLine();
-        if (checkId(id)) {
-            System.out.println("Đã tồn tại mã sinh viên!");
-        } else {
+        do{
+            System.out.println("Nhập mã sinh viên: ");
+            id = scanner.nextLine();
+            if(checkId(id)) {
+                System.out.println("Mã sinh viên đã tồn tại!");
+            } else break;
+        } while (checkId(id));
             System.out.println("Nhập họ tên sinh viên: ");
             name = scanner.nextLine();
             System.out.println("Nhập tuổi sinh viên: ");
@@ -51,9 +53,10 @@ public class StudentManager {
             avgScore = Double.parseDouble(scanner.nextLine());
             if (avgScore > 0) {
                 return new Student(id, name, age, gender, address, avgScore);
-            } else System.err.println("Điểm trung bình phải lớn hơn 0!");
-        }
-        return new Student();
+            } else {
+                System.err.println("Điểm trung bình phải lớn hơn 0!");
+                return null;
+            }
     }
 
 
@@ -69,53 +72,49 @@ public class StudentManager {
     //    hàm sửa thông tin sinh viên:
     public void updateStudentById() {
         System.out.println("Nhập mã sinh viên muốn sửa thông tin: ");
-        try {
-            String id = scanner.nextLine();
-            int index = findStudentById(id);
-            if (index >= 0) {
-                String newID;
-                int newAge;
-                double newAvgScore;
-                System.out.println("Nhập mã sinh viên: ");
-                newID = scanner.nextLine();
-                students.get(index).setId(newID);
-                System.out.println("Nhập họ tên sinh viên: ");
-                String newName = scanner.nextLine();
-                students.get(index).setName(newName);
-                System.out.println("Nhập tuổi sinh viên: ");
-                do {
-                    try {
-                        newAge = Integer.parseInt(scanner.nextLine());
-                        if (newAge > 0) {
-                            students.get(index).setAge(newAge);
-                            break;
-                        } else System.err.println("Tuổi không được âm!");
-                    } catch (NumberFormatException e) {
-                        System.err.println("Phải nhập số!");
-                    }
-                } while (true);
-                System.out.println("Nhập giới tính sinh viên:");
-                String gender = scanner.nextLine();
-                students.get(index).setGender(gender);
-                System.out.println("Nhập địa chỉ sinh viên:");
-                String address = scanner.nextLine();
-                students.get(index).setAddress(address);
-                System.out.println("Nhập điểm trung bình sinh viên:");
-                do {
-                    try {
-                        newAvgScore = Double.parseDouble(scanner.nextLine());
-                        if (newAvgScore > 0) {
-                            students.get(index).setAvgScore(newAvgScore);
-                            break;
-                        } else System.err.println("Điểm trung bình phải lớn hơn 0!");
-                    } catch (NumberFormatException e) {
-                        System.err.println("Điểm trung bình phải nhập số thập phân!");
-                    }
-                } while (true);
-            } else System.out.println("Không tìm được sinh viên có mã sinh viên " + id);
-        } catch (NumberFormatException e) {
-            System.err.println("Nhập số nhé!");
-        }
+        String id = scanner.nextLine();
+        int index = findStudentById(id);
+        if (index >= 0) {
+            String newID;
+            int newAge;
+            double newAvgScore;
+            System.out.println("Nhập mã sinh viên: ");
+            newID = scanner.nextLine();
+            students.get(index).setId(newID);
+            System.out.println("Nhập họ tên sinh viên: ");
+            String newName = scanner.nextLine();
+            students.get(index).setName(newName);
+            System.out.println("Nhập tuổi sinh viên: ");
+            do {
+                try {
+                    newAge = Integer.parseInt(scanner.nextLine());
+                    if (newAge > 0) {
+                        students.get(index).setAge(newAge);
+                        break;
+                    } else System.err.println("Tuổi không được âm!");
+                } catch (NumberFormatException e) {
+                    System.err.println("Phải nhập số!");
+                }
+            } while (true);
+            System.out.println("Nhập giới tính sinh viên:");
+            String gender = scanner.nextLine();
+            students.get(index).setGender(gender);
+            System.out.println("Nhập địa chỉ sinh viên:");
+            String address = scanner.nextLine();
+            students.get(index).setAddress(address);
+            System.out.println("Nhập điểm trung bình sinh viên:");
+            do {
+                try {
+                    newAvgScore = Double.parseDouble(scanner.nextLine());
+                    if (newAvgScore > 0) {
+                        students.get(index).setAvgScore(newAvgScore);
+                        break;
+                    } else System.err.println("Điểm trung bình phải lớn hơn 0!");
+                } catch (NumberFormatException e) {
+                    System.err.println("Điểm trung bình phải nhập số thập phân!");
+                }
+            } while (true);
+        } else System.out.println("Không tìm được sinh viên có mã sinh viên " + id);
     }
     //    hàm tìm sinh viên theo id:
 
@@ -130,12 +129,14 @@ public class StudentManager {
 
     //    hàm check mã sinh viên không trùng nhau:
     public boolean checkId(String id) {
-        for (int i = 0; i < students.size(); i++) {
-            if (students.get(i).getId().equals(id)) {
-                return true;
+        if(students.size()>0) {
+            for (int i = 0; i < students.size(); i++) {
+                if (students.get(i).getId().equals(id)) {
+                    return true;
+                }
             }
-        }
-        return false;
+            return false;
+        }else return false;
     }
 
     //    hàm xoá sinh viên theo mã sinh viên:
@@ -184,6 +185,7 @@ public class StudentManager {
     public void writeStudent() {
         readWrite.write((ArrayList<Student>) students);
     }
+
     public void readStudent() {
         readWrite.read();
     }
