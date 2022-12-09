@@ -1,6 +1,8 @@
 package model;
 
-public class Student {
+import java.io.Serializable;
+
+public class Student implements Serializable {
 //    mã sinh viên, họ tên, tuổi, giới tính, địa chỉ và điểm trung bình
     private String id;
     private String name;

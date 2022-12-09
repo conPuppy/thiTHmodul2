@@ -187,6 +187,6 @@ public class StudentManager {
     }
 
     public void readStudent() {
-        readWrite.read();
+        students = readWrite.read();
     }
 }
